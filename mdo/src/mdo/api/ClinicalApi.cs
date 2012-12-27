@@ -55,7 +55,7 @@ namespace gov.va.medora.mdo.api
 
         internal static List<string> loadFluCodes()
         {
-            string filepath = Path.Combine(utils.ResourceUtils.ResourcesPath, "data", "fluIcd9.xml");
+            string filepath = utils.ResourceUtils.ResourcesPath + "data\\fluIcd9.xml";
             if (String.IsNullOrEmpty(filepath))
             {
                 throw new ArgumentNullException("filepath");

@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-//using gov.va.medora.TOReflection;
+using gov.va.medora.TOReflection;
 using System.Collections.Specialized;
 using gov.va.medora.utils;
 using gov.va.medora.mdo.exceptions;
@@ -393,7 +393,7 @@ namespace gov.va.medora.mdo.dao.vista
                 }
             );
 
-            //Assert.AreEqual(new TOEqualizer(expected).HashCode, new TOEqualizer(result).HashCode);
+            Assert.AreEqual(new TOEqualizer(expected).HashCode, new TOEqualizer(result).HashCode);
         }
 
         [Test]

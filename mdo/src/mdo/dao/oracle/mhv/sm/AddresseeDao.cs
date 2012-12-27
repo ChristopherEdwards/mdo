@@ -18,8 +18,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.OracleClient;
+using System.Linq;
+using System.Text;
+using Oracle.DataAccess;
+using Oracle.DataAccess.Client;
 using gov.va.medora.mdo.domain.sm;
+using Oracle.DataAccess.Types;
 using System.Data;
 using gov.va.medora.mdo.exceptions;
 
@@ -57,7 +61,7 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleType.Number);
+            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleDbType.Decimal);
             addresseeIdParam.Value = Convert.ToDecimal(addresseeId);
             query.Command.Parameters.Add(addresseeIdParam);
 
@@ -89,22 +93,22 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter oplockPlusOneParam = new OracleParameter("oplockPlusOne", OracleType.Number);
+            OracleParameter oplockPlusOneParam = new OracleParameter("oplockPlusOne", OracleDbType.Decimal);
             oplockPlusOneParam.Value = Convert.ToDecimal(addressee.Oplock + 1);
             query.Command.Parameters.Add(oplockPlusOneParam);
 
-            OracleParameter modifiedDateParam = new OracleParameter("modifiedDate", OracleType.DateTime);
-            modifiedDateParam.Value = new OracleDateTime(DateTime.Now);
+            OracleParameter modifiedDateParam = new OracleParameter("modifiedDate", OracleDbType.Date);
+            modifiedDateParam.Value = new OracleDate(DateTime.Now);
             query.Command.Parameters.Add(modifiedDateParam);
 
-            OracleParameter folderIdParam = new OracleParameter("folderId", OracleType.Number);
+            OracleParameter folderIdParam = new OracleParameter("folderId", OracleDbType.Decimal);
             folderIdParam.Value = Convert.ToDecimal(addressee.FolderId);
             query.Command.Parameters.Add(folderIdParam);
 
-            OracleParameter readDateParam = new OracleParameter("readDate", OracleType.DateTime);
+            OracleParameter readDateParam = new OracleParameter("readDate", OracleDbType.Date);
             if (addressee.ReadDate.Year > 1900)
             {
-                readDateParam.Value = new OracleDateTime(addressee.ReadDate);
+                readDateParam.Value = new OracleDate(addressee.ReadDate);
             }
             else
             {
@@ -112,10 +116,10 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             }
             query.Command.Parameters.Add(readDateParam);
 
-            OracleParameter reminderDateParam = new OracleParameter("reminderDate", OracleType.DateTime);
+            OracleParameter reminderDateParam = new OracleParameter("reminderDate", OracleDbType.Date);
             if (addressee.ReminderDate.Year > 1900)
             {
-                reminderDateParam.Value = new OracleDateTime(addressee.ReminderDate);
+                reminderDateParam.Value = new OracleDate(addressee.ReminderDate);
             }
             else
             {
@@ -123,11 +127,11 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             }
             query.Command.Parameters.Add(reminderDateParam);
 
-            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleType.Number);
+            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleDbType.Decimal);
             addresseeIdParam.Value = Convert.ToDecimal(addressee.Id);
             query.Command.Parameters.Add(addresseeIdParam);
 
-            OracleParameter oplockParam = new OracleParameter("oplock", OracleType.Number);
+            OracleParameter oplockParam = new OracleParameter("oplock", OracleDbType.Decimal);
             oplockParam.Value = Convert.ToDecimal(addressee.Oplock);
             query.Command.Parameters.Add(oplockParam);
 
@@ -141,7 +145,7 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = buildCreateAddresseeQuery(addressee, messageId);
             nonQuery insertQuery = delegate() { return query.Command.ExecuteNonQuery(); };
             _cxn.query(query, insertQuery);
-            addressee.Id = Decimal.ToInt32((Decimal) query.Command.Parameters["outId"].Value);
+            addressee.Id = ((Oracle.DataAccess.Types.OracleDecimal)query.Command.Parameters["outId"].Value).ToInt32();
             return addressee;
         }
 
@@ -164,23 +168,23 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter addresseeRoleParam = new OracleParameter("addresseeRole", OracleType.Number);
+            OracleParameter addresseeRoleParam = new OracleParameter("addresseeRole", OracleDbType.Decimal);
             addresseeRoleParam.Value = Convert.ToDecimal((Int32)addressee.Role);
             query.Command.Parameters.Add(addresseeRoleParam);
 
-            OracleParameter smIdParam = new OracleParameter("smId", OracleType.Number);
+            OracleParameter smIdParam = new OracleParameter("smId", OracleDbType.Decimal);
             smIdParam.Value = Convert.ToDecimal(messageId);
             query.Command.Parameters.Add(smIdParam);
 
-            OracleParameter userIdParam = new OracleParameter("userId", OracleType.Number);
+            OracleParameter userIdParam = new OracleParameter("userId", OracleDbType.Decimal);
             userIdParam.Value = Convert.ToDecimal(addressee.Owner.Id);
             query.Command.Parameters.Add(userIdParam);
 
-            OracleParameter folderIdParam = new OracleParameter("folderId", OracleType.Number);
+            OracleParameter folderIdParam = new OracleParameter("folderId", OracleDbType.Decimal);
             folderIdParam.Value = Convert.ToDecimal(addressee.Folder.Id);
             query.Command.Parameters.Add(folderIdParam);
 
-            OracleParameter outParam = new OracleParameter("outId", OracleType.Number);
+            OracleParameter outParam = new OracleParameter("outId", OracleDbType.Decimal);
             outParam.Direction = ParameterDirection.Output;
             query.Command.Parameters.Add(outParam);
 
@@ -205,7 +209,7 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleType.Number);
+            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleDbType.Decimal);
             addresseeIdParam.Value = Convert.ToDecimal(addresseeId);
             query.Command.Parameters.Add(addresseeIdParam);
 
@@ -242,7 +246,7 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter messageIdParam = new OracleParameter("messageId", OracleType.Number);
+            OracleParameter messageIdParam = new OracleParameter("messageId", OracleDbType.Decimal);
             messageIdParam.Value = messageId;
             query.Command.Parameters.Add(messageIdParam);
 
@@ -286,7 +290,7 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
                     throw new mdo.exceptions.MdoException("Unable to mark message as read");
                 }
 
-                Int32 msgId = Decimal.ToInt32((Decimal)query.Command.Parameters["outId"].Value);
+                Int32 msgId = ((Oracle.DataAccess.Types.OracleDecimal)query.Command.Parameters["outId"].Value).ToInt32();
                 addressee.Oplock++;
 
                 SecureMessageDao msgDao = new SecureMessageDao(_cxn);
@@ -312,27 +316,27 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter readDateParam = new OracleParameter("readDate", OracleType.DateTime);
-            readDateParam.Value = new OracleDateTime(addressee.ReadDate = DateTime.Now);
+            OracleParameter readDateParam = new OracleParameter("readDate", OracleDbType.Date);
+            readDateParam.Value = new OracleDate(addressee.ReadDate = DateTime.Now);
             query.Command.Parameters.Add(readDateParam);
 
-            OracleParameter oplockPlusOneParam = new OracleParameter("oplockPlusOne", OracleType.Number);
+            OracleParameter oplockPlusOneParam = new OracleParameter("oplockPlusOne", OracleDbType.Decimal);
             oplockPlusOneParam.Value = Convert.ToDecimal(addressee.Oplock + 1);
             query.Command.Parameters.Add(oplockPlusOneParam);
 
-            OracleParameter modifiedDateParam = new OracleParameter("modifiedDate", OracleType.DateTime);
-            modifiedDateParam.Value = new OracleDateTime(DateTime.Now);
+            OracleParameter modifiedDateParam = new OracleParameter("modifiedDate", OracleDbType.Date);
+            modifiedDateParam.Value = new OracleDate(DateTime.Now);
             query.Command.Parameters.Add(modifiedDateParam);
 
-            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleType.Number);
+            OracleParameter addresseeIdParam = new OracleParameter("addresseeId", OracleDbType.Decimal);
             addresseeIdParam.Value = Convert.ToDecimal(addressee.Id);
             query.Command.Parameters.Add(addresseeIdParam);
 
-            OracleParameter oplockParam = new OracleParameter("oplock", OracleType.Number);
+            OracleParameter oplockParam = new OracleParameter("oplock", OracleDbType.Decimal);
             oplockParam.Value = Convert.ToDecimal(addressee.Oplock);
             query.Command.Parameters.Add(oplockParam);
 
-            OracleParameter outParam = new OracleParameter("outId", OracleType.Number);
+            OracleParameter outParam = new OracleParameter("outId", OracleDbType.Decimal);
             outParam.Direction = ParameterDirection.Output;
             query.Command.Parameters.Add(outParam);
 
@@ -410,11 +414,11 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter messageIdParam = new OracleParameter("messageId", OracleType.Number);
+            OracleParameter messageIdParam = new OracleParameter("messageId", OracleDbType.Decimal);
             messageIdParam.Value = messageId;
             query.Command.Parameters.Add(messageIdParam);
 
-            OracleParameter userIdParam = new OracleParameter("userId", OracleType.Number);
+            OracleParameter userIdParam = new OracleParameter("userId", OracleDbType.Decimal);
             userIdParam.Value = userId;
             query.Command.Parameters.Add(userIdParam);
 
@@ -458,19 +462,19 @@ namespace gov.va.medora.mdo.dao.oracle.mhv.sm
             OracleQuery query = new OracleQuery();
             query.Command = new OracleCommand(sql);
 
-            OracleParameter folderIdParam = new OracleParameter("folderId", OracleType.Number);
+            OracleParameter folderIdParam = new OracleParameter("folderId", OracleDbType.Decimal);
             folderIdParam.Value = addressee.FolderId;
             query.Command.Parameters.Add(folderIdParam);
 
-            OracleParameter oplockPlusOneParam = new OracleParameter("oplockPlusOne", OracleType.Number);
+            OracleParameter oplockPlusOneParam = new OracleParameter("oplockPlusOne", OracleDbType.Decimal);
             oplockPlusOneParam.Value = addressee.Oplock + 1;
             query.Command.Parameters.Add(oplockPlusOneParam);
 
-            OracleParameter addresseeParam = new OracleParameter("addresseeId", OracleType.Number);
+            OracleParameter addresseeParam = new OracleParameter("addresseeId", OracleDbType.Decimal);
             addresseeParam.Value = addressee.Id;
             query.Command.Parameters.Add(addresseeParam);
 
-            OracleParameter oplockParam = new OracleParameter("oplock", OracleType.Number);
+            OracleParameter oplockParam = new OracleParameter("oplock", OracleDbType.Decimal);
             oplockParam.Value = addressee.Oplock;
             query.Command.Parameters.Add(oplockParam);
 

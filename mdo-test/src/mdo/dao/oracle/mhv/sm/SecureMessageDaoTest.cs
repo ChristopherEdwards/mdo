@@ -17,9 +17,16 @@
 #endregion
 
 using System;
-using System.Data.OracleClient;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using NUnit.Framework;
 using System.Data;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using gov.va.medora.utils;
+using Oracle.DataAccess.Client;
 
 namespace gov.va.medora.mdo.dao.oracle.mhv.sm
 {

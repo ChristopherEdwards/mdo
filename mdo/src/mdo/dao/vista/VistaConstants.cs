@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Text;
 using gov.va.medora.mdo.conf;
 
@@ -139,6 +138,6 @@ namespace gov.va.medora.mdo.dao.vista
 
         public const string GET_VARIABLE_VALUE = "XWB GET VARIABLE VALUE";
 
-        public static string VISTA_FILEDEFS_PATH = Path.Combine(utils.ResourceUtils.ResourcesPath, "xml", "VistaFiles.xml");
+        public static string VISTA_FILEDEFS_PATH = utils.ResourceUtils.ResourcesPath + "xml/VistaFiles.xml";
     }
 }

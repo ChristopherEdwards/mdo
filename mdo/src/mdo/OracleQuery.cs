@@ -16,7 +16,12 @@
 //
 #endregion
 
-using System.Data.OracleClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+//using System.Data.OracleClient;
+using Oracle.DataAccess.Client;
 
 namespace gov.va.medora.mdo
 {

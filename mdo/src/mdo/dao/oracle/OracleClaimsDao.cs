@@ -19,8 +19,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Data.OracleClient;
+using System.Text;
+using Oracle.DataAccess.Client;
+using Oracle.DataAccess.Types;
 using gov.va.medora.mdo.exceptions;
+//using System.Data.OracleClient;
 
 namespace gov.va.medora.mdo.dao.oracle
 {

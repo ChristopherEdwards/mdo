@@ -68,8 +68,9 @@ namespace gov.va.medora.utils
         {
             try
             {
-                string current = Directory.GetCurrentDirectory();
-                current = current.Replace("file:", "");
+                string current = System.IO.Path.GetDirectoryName(
+                    Assembly.GetExecutingAssembly().GetName().CodeBase);
+                current = current.Replace("file:\\", "");
                 return getResources(current);
             }
             catch (Exception)
@@ -101,11 +102,15 @@ namespace gov.va.medora.utils
                 }
                 else // found it!
                 {
-                    if (dirs[0].FullName.Contains("bin")) // if we're in bin directory, keep recursing up - TBD: should we use this convention?
+                    if (dirs[0].FullName.Contains("\\bin\\")) // if we're in bin directory, keep recursing up - TBD: should we use this convention?
                     {
                         return getResources(di.Parent.FullName);
                     }
-                    else return dirs[0].FullName;
+                    if (dirs[0].FullName.EndsWith("\\"))
+                    {
+                        return dirs[0].FullName; 
+                    }
+                    else return dirs[0].FullName + "\\";
                 }
             }
             catch (Exception)

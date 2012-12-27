@@ -18,7 +18,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.OracleClient;
+using System.Linq;
+using System.Text;
+using gov.va.medora.mdo.dao.oracle;
+using Oracle.DataAccess.Client;
+//using Oracle.DataAccess.Types;
+//using System.Data.OracleClient;
 
 namespace gov.va.medora.mdo.dao.oracle.vadir
 {
@@ -72,31 +77,31 @@ namespace gov.va.medora.mdo.dao.oracle.vadir
             query.Command.CommandType = System.Data.CommandType.StoredProcedure;
 
             //OracleParameter idParam = new System.Data.OracleClient.OracleParameter("VA_ID_IN", OracleType.Number);
-            OracleParameter idParam = new OracleParameter("VA_ID_IN", OracleType.Number);
+            OracleParameter idParam = new OracleParameter("VA_ID_IN", OracleDbType.Decimal);
             idParam.Direction = System.Data.ParameterDirection.Input;
             idParam.Value = Convert.ToDecimal(patient.EDIPI);
             query.Command.Parameters.Add(idParam);
 
             //OracleParameter lNameParam = new System.Data.OracleClient.OracleParameter("LNAME_IN", OracleType.VarChar, 26);
-            OracleParameter lNameParam = new OracleParameter("LNAME_IN", OracleType.VarChar, 26);
+            OracleParameter lNameParam = new OracleParameter("LNAME_IN", OracleDbType.Varchar2, 26);
             lNameParam.Direction = System.Data.ParameterDirection.Input;
             lNameParam.Value = "";
             query.Command.Parameters.Add(lNameParam);
 
             //OracleParameter ssnParam = new System.Data.OracleClient.OracleParameter("SSN_IN", OracleType.VarChar, 9);
-            OracleParameter ssnParam = new OracleParameter("SSN_IN", OracleType.VarChar, 9);
+            OracleParameter ssnParam = new OracleParameter("SSN_IN", OracleDbType.Varchar2, 9);
             ssnParam.Direction = System.Data.ParameterDirection.Input;
             ssnParam.Value = "";
             query.Command.Parameters.Add(ssnParam);
 
             //OracleParameter dobParam = new System.Data.OracleClient.OracleParameter("DOB_IN", OracleType.DateTime);
-            OracleParameter dobParam = new OracleParameter("DOB_IN", OracleType.DateTime);
+            OracleParameter dobParam = new OracleParameter("DOB_IN", OracleDbType.Date);
             dobParam.Direction = System.Data.ParameterDirection.Input;
             dobParam.Value = DBNull.Value;
             query.Command.Parameters.Add(dobParam);
 
             //OracleParameter returnParam = new OracleParameter("v_Return", OracleType.Clob);
-            OracleParameter returnParam = new OracleParameter("v_Return", OracleType.Clob);
+            OracleParameter returnParam = new OracleParameter("v_Return", OracleDbType.Clob);
             returnParam.Direction = System.Data.ParameterDirection.ReturnValue;
             query.Command.Parameters.Add(returnParam);
 
@@ -111,7 +116,7 @@ namespace gov.va.medora.mdo.dao.oracle.vadir
                 {
                     return null;
                 }
-                string text = ((OracleLob)query.Command.Parameters["v_Return"].Value).Value.ToString();
+                string text = ((Oracle.DataAccess.Types.OracleClob)query.Command.Parameters["v_Return"].Value).Value.ToString();
                 return new TextReport() { Text = text };
             }
         }
