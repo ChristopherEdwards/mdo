@@ -68,7 +68,8 @@ namespace gov.va.medora.utils
             FileIOUtils.writeToFile(FILE_NAME, data, false);
             Assert.IsTrue(File.Exists(FILE_NAME));
 
-            string expected = data[0] + StringUtils.CRLF + data[1] + StringUtils.CRLF + data[2] + StringUtils.CRLF;
+            string NL = Environment.NewLine;
+            string expected = data[0] + NL + data[1] + NL + data[2] + NL;
             Assert.AreEqual(expected, FileIOUtils.readFromFile(FILE_NAME));
 
             FileIOUtils.writeToFile(FILE_NAME, data, true);

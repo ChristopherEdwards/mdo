@@ -17,11 +17,8 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using NUnit.Framework;
-using System.Reflection;
 using gov.va.medora.utils;
 
 namespace gov.va.medora.mdo.src.mdo.utils
@@ -43,7 +40,8 @@ namespace gov.va.medora.mdo.src.mdo.utils
         public void testGetResources() 
         {
             string path = ResourceUtils.ResourcesPath;
-            string pathToTest=Path.Combine("mdo-test", "resources")
+            string pathToTest = Path.Combine("mdo-test", "resources");
+            Console.WriteLine(pathToTest);
             Assert.IsTrue(path.EndsWith(pathToTest));
         }
 
@@ -51,7 +49,7 @@ namespace gov.va.medora.mdo.src.mdo.utils
         public void testGetXmlResources()
         {
             string path = ResourceUtils.XmlResourcesPath;
-            string pathToTest=Path.Combine("mdo-test","resources","xml");
+            string pathToTest = Path.Combine("mdo-test", "resources", "xml");
             Assert.IsTrue(path.EndsWith(pathToTest));
         }
 
@@ -59,7 +57,7 @@ namespace gov.va.medora.mdo.src.mdo.utils
         public void testGetDataResources()
         {
             string path = ResourceUtils.DataResourcesPath;
-            string pathToTest=Path.Combine("mdo-test","resources","data");
+            string pathToTest = Path.Combine("mdo-test", "resources", "data");
             Assert.IsTrue(path.EndsWith(pathToTest));
         }
     }
