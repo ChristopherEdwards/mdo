@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,8 @@ namespace gov.va.medora.mdo.dao.file
         [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void testReadConfigInvalidFile()
         {
-            string foo = "C:\\NotARealFile.conf";
+            string projectResourcePath = gov.va.medora.utils.ResourceUtils.ResourcesPath;
+            string foo = Path.Combine(projectResourcePath, "NotARealFile.conf");
             ConfigFileDao dao = new ConfigFileDao(foo);
             dao.getAllValues();
         }
@@ -40,7 +42,7 @@ namespace gov.va.medora.mdo.dao.file
         public void testReadConfigValidFile()
         {
             string projectResourcePath = gov.va.medora.utils.ResourceUtils.ResourcesPath;
-            string confFilePath = projectResourcePath + "conf\\app.conf";
+            string confFilePath = Path.Combine(projectResourcePath, "conf", "app.conf");
 
             ConfigFileDao dao = new ConfigFileDao(confFilePath);
             Dictionary<string, Dictionary<string, string>> result = dao.getAllValues();
